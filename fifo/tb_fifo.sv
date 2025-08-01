@@ -39,7 +39,7 @@ module tb_sync_fifo;
     $finish;
   end
 
-    fifo #(8,4) u_fifo (
+    naive_fifo #(8,4) u_fifo (
     	clk, rstn, push, pop, full, a_full, empty, a_empty,  din, dout
     );
   
