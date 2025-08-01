@@ -1,4 +1,4 @@
-module fifo
+module naive_fifo
 #(
 	parameter WIDTH = 8,
 	parameter DEPTH = 32,
@@ -33,7 +33,7 @@ always@(posedge clk or negedge rstn) begin
 			
 		end else if (pop && ~empty) begin
 			for(i = 1; i < DEPTH; i=i+1) begin
-				mem[i-1] <= mem[i];
+				mem[i-1] <= mem[i]; // Problem Point : O(N) Time-Complexity
 			end
 			dout <= mem[0]; // pop head
 			pTail <= pTail-1;		
