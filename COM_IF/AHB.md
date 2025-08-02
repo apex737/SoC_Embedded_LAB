@@ -22,7 +22,7 @@
   * __Wrap__
     * 순환 버퍼의 Boundary를 지정하여 그 내부에서 주소를 증가하면서 접근
     * Boundary = HSIZE * HBURST_beat
-      * Ex. HSize = 8Byte, HBURST = 2 (4-beat), StartAddr = 0x3C
+    * Ex. HSize = 8Byte, HBURST = 2 (4-beat), StartAddr = 0x3C
       * Boundary  = 8 * 4 = 32Byte
       * Range     = [0x00 ~ 0x1F], [0x20 ~ 0x3F], [0x40 ~ 0x5F]...
       * HAddr     = 0x3C -> ~0x44~ -> 0x24 -> 0x3C ...
