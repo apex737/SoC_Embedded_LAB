@@ -1,12 +1,12 @@
 ## <APB: Advanced Peri-Bus>
 * APB 브릿지(M) -> 저성능 장치(S)
-* write
-* sel, addr(cs) : 어떤 slave의 어떤 레지스터?
+* __write__
+* __sel, addr(cs)__ : 어떤 slave의 어떤 레지스터?
 > 몇동 몇호? 
-* en   : M -> S strob
-* ready: S -> M strob
-* wdata, rdata
-* state
+* __en__   : M -> S strob
+* __ready__: S -> M strob
+* __wdata, rdata__
+* __state__
 	* __IDLE__
  	* __SETUP__:
   		* Set sel, addr, data
