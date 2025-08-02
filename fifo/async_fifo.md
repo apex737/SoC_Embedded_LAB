@@ -1,7 +1,8 @@
 ## Async FIFO
 ### Why : Clock Domain Crossing (CDC)
-- Metastability
-- pulse signal
+* __Metastability__
+* __Passing short CDC signal__
+* __Why Gray Code__
   
 ### How
 * wptr, rptr base circular fifo
@@ -16,6 +17,7 @@ __Why Async_FIFO__
 * A클럭의 에지에서 캡처하는 경우 메타스테빌리티
 * 안정될때까지 시간을 끌어주는게 동기화 장치; 단순히 dff 하나 더 쓰나?
   
-__Passing short CDC signal__
+  
+
 
 
