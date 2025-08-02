@@ -18,6 +18,10 @@ __Why Async_FIFO__
 * 안정될때까지 시간을 끌어주는게 동기화 장치; 단순히 dff 하나 더 쓰나?
   
   
+```verilog
+module async_fifo();
 
+endmodule
+```
 
 
