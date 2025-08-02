@@ -1,6 +1,5 @@
-
-<APB: Advanced Peri-Bus>
-APB 브릿지(M) -> 저성능 장치(S)
+## <APB: Advanced Peri-Bus>
+- APB 브릿지(M) -> 저성능 장치(S)
 - write  	: 0 read, 1 write
 - sel, addr(cs) : 어떤 slave의 어떤 레지스터?
 > 몇동 몇호? 
