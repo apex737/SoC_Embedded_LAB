@@ -29,7 +29,7 @@
   
 * __HSIZE[2:0]__: 클럭 당 __주소 증가__ size
 
-#### <Arbitration> 
+#### < Arbitration >
 > 운영체제의 CPU 스케쥴링, 동기화 개념이 사용됨
 * __HMASTER__: 버스 소유 마스터
 * __HBUSREQ__: 마스터가 아비터에게 버스 소유권 요청
