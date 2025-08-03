@@ -8,7 +8,7 @@
 #### < Burst-Mode >
 * __HTRANS[1:0]__ (state)
   * __IDLE__ 
-  * __BUSY__  : Burst Transfer 중 인터럽트 
+  * __BUSY__ 
   * __NONSEQ__: 단일 데이터 또는 burst의 첫 전송
   * __SEQ__   : 연속 데이터 전송
    
