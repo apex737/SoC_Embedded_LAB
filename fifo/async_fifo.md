@@ -36,6 +36,14 @@ __2) Bin2Gray 변환기__
   * 이로써, meta 문제가 단순 2-클럭 지연으로 바뀐다.
   
 ```verilog
+/*      Implement Flow
+
+        1) set rptr, wptr for  fifo
+        2) 2-ff synchronizer
+        3) bin2gray
+        4) define strobs
+*/
+
 module async_fifo();
 
 endmodule
