@@ -15,13 +15,13 @@
 * __HBURST[2:0]__ (mode select)
   * __Case__
     * 0: 단일 데이터
-    * 1: N-연속(beat) 순차 전송
-    * 2/3: 4-beat wrap/순차 전송
-    * 4/5: 8-beat wrap/순차 전송
-    * 6/7: 16-beat wrap/순차 전송
-  * __Wrap__
-    * 순환 버퍼의 Boundary를 지정하여 그 내부에서 주소를 증가하면서 접근
-    * Boundary = HSIZE * HBURST_beat
+    * 1: N-연속(packet) 순차 전송
+    * 2/3: 4-packet wrap/순차 전송
+    * 4/5: 8-packet wrap/순차 전송
+    * 6/7: 16-packet wrap/순차 전송
+  * __Wrap??__
+    * 버퍼의 Boundary를 지정하여 그 내부를 순회하는 방식
+    * Boundary = HSIZE(byte size) * HBURST(packet length)
     * Ex. HSize = 8Byte, HBURST = 2 (4-beat), StartAddr = 0x3C
       * Boundary  = 8 * 4 = 32Byte
       * Range     = [0x00 ~ 0x1F], [0x20 ~ 0x3F], [0x40 ~ 0x5F]...
