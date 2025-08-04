@@ -23,4 +23,4 @@
 #### 한계
 * 1:1 통신만 가능
 * 더 느린쪽에 baud-rate을 맞춰야 함
-* Reciever의 ACK-bit 없음; __수신양호__ 확인불가 
+* Reciever의 ACK(resp) 없음; __수신양호__ 확인불가 
