@@ -1,5 +1,6 @@
 ## Universal Asynchronous Reciever/Transmitter
-* MS 구조가 없고, Tx/Rx/GND 3개의 선을 기본으로 사용
+* 클럭이 없는 대신 Baud-Rate(9600, 115200...)를 맞춤 
+* MS 구조가 없고, __Tx/Rx/GND 3개의 선을 기본으로 사용__
 * 추가적으로 Ready 관련 Strob가 붙을 수 있어서 3~5 line이 사용됨
 
 #### 구성
