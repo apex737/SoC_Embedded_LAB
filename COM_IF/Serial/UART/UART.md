@@ -16,7 +16,7 @@
 * 옵션에 따라 parity가 있으면 넣은 뒤에, 아니면 바로 HIGH로 복귀하여 End
 * __즉, parity가 없으면 10bit가 1-Frame(8N1)이 된다.__
 #### 구현
-1) Bit-Banging (로직 하드코딩)
+1) Bit-Banging (하드코딩)
 2) UART-Peri (주로 Interrupt 방식)
 > Ex. STM32 HAL 드라이버; HAL_UART_Receive_IT(&huart, pData, Size) 
 #### 한계
