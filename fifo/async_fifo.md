@@ -28,8 +28,8 @@ __1) Syncronizer__
 __2) Bin2Gray 변환기__
 > multi-bit 전송에서 metastability 문제의 해법 
 
-* 영역 A의 wptr, 영역 B의 rptr은 binary 카운터처럼 동작한다. 그러나, Async-FIFO 내부의 ptr 송수신에서까지 binary 방식을 그대로 전달하면 치명적인 문제가 발생할 수 있다.
-* 예컨대, 카운터가 011(bin_3) -> 100(bin_4) 으로 바뀌는 경우 3개의 신호선 모두 meta를 가지기 때문에 000에서 111까지 모든 값이 출력되어 시스템이 망가질 수 있다.
+* 영역 A의 wptr, 영역 B의 rptr은 binary 카운터처럼 동작한다. 그러나, Async-FIFO 내부의 ptr 송수신에서까지 binary 방식으로 전달하면 치명적인 문제가 발생할 수 있다.
+* 예컨대, 카운터가 011(bin_3) -> 100(bin_4) 으로 바뀌는 경우 3개의 신호선 모두 meta를 가지기 때문에 000에서 111까지 모든 값이 출력될 수 있어서, 시스템이 망가질 수 있다.
 * 반면에, 010(gray_3) -> 110(gray_4) 으로 카운터가 바뀌는 경우 sigle-bit만 변화하기 때문에 앞의 sigle-bit 상황으로 문제를 축소할 수 있다.
   * __010 -> meta -> 110:__ 운좋게 값이 의도대로 잘 출력됨 -> okay
   * __010 -> meta -> 010:__ 운나쁘게 값이 의도대로 출력되지 않음 -> 다음 클럭에는 meta가 아닌 안정된 값이 들어오므로 okay
@@ -59,10 +59,10 @@ reg [7:0] circular_fifo [0:7];
 // wclk (쓰는 속도)가 rclk (읽는 속도)보다 빠르면 ovf, 느리면 udf 발생 가능
 // 이걸 제어하기 위한 신호가 full과 empty이며 이 Strob를 정의하기 위해서 ptr 통신이 필요함
 wire full  = wptr_gray[3:2] == ~rptr_gray_wclk[3:2] &&
-             wptr_gray[1:0] == rptr_gray_wclk[1:0]; /* Ex. bin         bin + N
-                                                           00011       10011
-                                                           00001       01001
-                                                           00010       11010
+             wptr_gray[1:0] == rptr_gray_wclk[1:0]; /*    Ex. bin         bin + N
+                                                   raw        00011       10011
+                                                   shifted    00001       01001
+                                                   xor        00010       11010
                                                        상위 2-bit은 반전관계 && 나머지 일치 */
 wire empty = rptr_gray == wptr_gray_rclk;
 
