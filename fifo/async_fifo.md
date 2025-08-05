@@ -72,7 +72,7 @@ wire full  = wptr_gray[3:2] == ~rptr_gray_wclk[3:2] &&
 wire empty = rptr_gray == wptr_gray_rclk;
 
 //////////////////////// Write-Side ////////////////////////
-reg [3:0] wptr, wptr_meta, wptr_rclk;
+reg [3:0] wptr, wptr_meta, wptr_rclk; // w-영역의 ptr은 meta 상태를 거쳐서 r-영역에 도달
 wire wptr_gray;
 integer i;
 
