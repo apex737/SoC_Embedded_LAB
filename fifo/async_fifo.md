@@ -44,8 +44,88 @@ __2) Bin2Gray 변환기__
         4) define strobs
 */
 
-module async_fifo();
+module async_fifo_8x8 (
+   // Write
+   input wclk, rclk,
+   input rstn,
+   input [7:0] din,
+   output [7:0] dout,
+   // COM strob
+   output full, empty,
+);
 
+reg [7:0] circular_fifo [0:7];
+
+// wclk (쓰는 속도)가 rclk (읽는 속도)보다 빠르면 ovf, 느리면 udf 발생 가능
+// 이걸 제어하기 위한 신호가 full과 empty이며 이 Strob를 정의하기 위해서 ptr 통신이 필요함
+wire full  = wptr_gray[3:2] == ~rptr_gray_wclk[3:2] &&
+             wptr_gray[1:0] == rptr_gray_wclk[1:0]; /* Ex. bin         bin + N
+                                                           00011       10011
+                                                           00001       01001
+                                                           00010       11010
+                                                       상위 2-bit은 반전관계 && 나머지 bit가 같으면 Full */
+wire empty = rptr_gray == wptr_gray_rclk;
+
+//////////////////////// Write-Side ////////////////////////
+reg [3:0] wptr, wptr_meta, wptr_rclk;
+wire wptr_gray;
+integer i;
+
+always@(posedge wclk or negedge rstn) begin
+   if(~rstn) begin
+      for(i=0;i<8;i=i+1) circular_fifo[i] <= 0;
+      wptr <= 0;
+   end
+   else if(~full) begin
+      circular_fifo[wptr[2:0]] <= din;
+      wptr <= wptr + 1;
+   end
+end
+
+// Write-Side 2-ff Synchronizer
+always@(posedge wclk or negedge rstn) begin
+   if(~rstn) begin
+      wptr_meta <= 0;
+      wptr_rclk <= 0;
+   end else begin
+      wptr_meta <= wptr_gray;
+      wptr_rclk <= wptr_meta;
+   end
+end
+
+//////////////////////// Read Side ( Write Size와 대칭 ) ////////////////////////
+reg rptr, rptr_meta, rptr_wclk;
+wire rptr_gray;
+
+always@(posedge rclk or negedge rstn) begin
+   if(~rstn) rptr <= 0;
+   else if(~empty) begin
+      dout <= circular_fifo[rptr[2:0]];
+      rptr <= rptr + 1;
+   end
+end
+
+// Read-Side 2-ff Synchronizer
+always@(posedge rclk or negedge rstn) begin
+   if(~rstn) begin
+      rptr_meta <= 0;
+      rptr_wclk <= 0;
+   end else begin
+      rptr_meta <= rptr_gray;
+      rptr_wclk <= rptr_meta;
+   end
+end
+
+// bin2gray
+function [3:0] bin2gray;
+   input bin;
+   begin
+      assign bin2gray = (bin >> 1) ^ bin;
+   end
+endfunction
+
+assign wptr_gray = bin2gray(wptr);
+assign rptr_gray = bin2gray(rptr);
 endmodule
 ```
 
