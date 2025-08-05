@@ -63,7 +63,7 @@ wire full  = wptr_gray[3:2] == ~rptr_gray_wclk[3:2] &&
                                                            00011       10011
                                                            00001       01001
                                                            00010       11010
-                                                       상위 2-bit은 반전관계 && 나머지 bit가 같으면 Full */
+                                                       상위 2-bit은 반전관계 && 나머지 일치 */
 wire empty = rptr_gray == wptr_gray_rclk;
 
 //////////////////////// Write-Side ////////////////////////
