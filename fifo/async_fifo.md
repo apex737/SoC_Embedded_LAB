@@ -45,13 +45,18 @@ __2) Bin2Gray 변환기__
 */
 
 module async_fifo_8x8 (
-   // Write
-   input wclk, rclk,
    input rstn,
+   // Write-Side
+   input wclk,
+   input push,
    input [7:0] din,
+   output full,
+
+   // Read-Side
+   input rclk,
+   input pop,
    output [7:0] dout,
-   // COM strob
-   output full, empty,
+   output empty
 );
 
 reg [7:0] circular_fifo [0:7];
@@ -76,7 +81,7 @@ always@(posedge wclk or negedge rstn) begin
       for(i=0;i<8;i=i+1) circular_fifo[i] <= 0;
       wptr <= 0;
    end
-   else if(~full) begin
+   else if(push && ~full) begin
       circular_fifo[wptr[2:0]] <= din;
       wptr <= wptr + 1;
    end
@@ -99,7 +104,7 @@ wire rptr_gray;
 
 always@(posedge rclk or negedge rstn) begin
    if(~rstn) rptr <= 0;
-   else if(~empty) begin
+   else if(pop && ~empty) begin
       dout <= circular_fifo[rptr[2:0]];
       rptr <= rptr + 1;
    end
