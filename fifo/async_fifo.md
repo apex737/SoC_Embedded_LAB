@@ -14,15 +14,15 @@
 * 그러나, wptr/rptr은 CDC-signal(Async)이므로 통과 경계에서 문제가 된다.
 
 #### 문제 2. Metastability
-> Async Signal이 Sync-Domain으로 들어올 때 Metastable Data(meta)가 발생하는 문제
+> Sync-Domain의 클럭이 Async Signal의 Metastable Data(meta)를 캡처하는 문제
 
 __1) Syncronizer__
-> meta는 결국에 하나의 값으로 결정되나, 문제는 그 결과를 예측할수 없다는 것이다.
+> meta는 결국 하나의 값으로 결정(안정)되나, 문제는 그 결과를 예측할 수 없다는 것이다.
 
-* 이 경우, 주로 2-ff 동기화기를 써서 meta를 자기 영역에 동기화시켜서 해결한다.
-* 예컨대, 입력이 HIGH인 상황에서 바로 다음 클럭에
+* 이 경우, 주로 2-ff 동기화기를 써서 __meta가 안정되는 시간을 번다.__
+* 예컨대, 입력이 HIGH(1)인 상황에서 바로 다음 클럭에
   * __0 -> meta -> 1:__ 운좋게 값이 의도대로 잘 출력됨 -> okay
-  * __0 -> meta -> 0:__ 운나쁘게 값이 의도대로 출력되지 않음 -> 다음 클럭에는 meta가 아닌 안정된 1이 들어오므로 okay
+  * __0 -> meta -> 0:__ 운나쁘게 값이 의도대로 출력되지 않음 -> 다음 클럭부터 meta가 아닌 안정된 1이 들어오므로 okay
   * __이로써, meta 문제가 단순 2-클럭 지연으로 바뀐다.__
     
 __2) Bin2Gray 변환기__
