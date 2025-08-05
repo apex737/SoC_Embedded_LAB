@@ -1,7 +1,7 @@
 ### <AHB: Advanced High Performance Bus>
 ### 1) 2-phase (addr, data)
-- __addr phase__: __Set__  <addr>, <sel>, <write>, <data>
-- __data phase__: Transfer <data>
+- __addr phase__: __Set__  addr, sel, write, data
+- __data phase__: Transfer data
 - __2-phase__ 구조를 통해 data-pipelining과 multi-transfer(Burst-Mode)를 구현
 
 ### 2) Additional Signals ( APB+ )
