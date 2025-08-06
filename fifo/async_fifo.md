@@ -93,7 +93,7 @@ always@(posedge wclk or negedge rstn) begin
    end
 end
 
-// Write-Side 2-ff Synchronizer
+// Write-Side 2-ff Synchronizer (W->R Channel)
 always@(posedge wclk or negedge rstn) begin
    if(~rstn) begin
       wptr_meta <= 0;
@@ -105,7 +105,7 @@ always@(posedge wclk or negedge rstn) begin
 end
 
 //////////////////////// Read Side ( Write Size와 대칭 ) ////////////////////////
-reg rptr, rptr_meta, rptr_wclk;
+reg rptr, rptr_meta, rptr_wclk; // r-영역의 ptr은 meta 상태를 거쳐서 w-영역에 도달
 wire rptr_gray;
 
 always@(posedge rclk or negedge rstn) begin
@@ -116,7 +116,7 @@ always@(posedge rclk or negedge rstn) begin
    end
 end
 
-// Read-Side 2-ff Synchronizer
+// Read-Side 2-ff Synchronizer (R->W Channel)
 always@(posedge rclk or negedge rstn) begin
    if(~rstn) begin
       rptr_meta <= 0;

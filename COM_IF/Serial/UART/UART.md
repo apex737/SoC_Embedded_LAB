@@ -33,5 +33,3 @@
 - 1:1 통신만 가능
 - 더 느린쪽에 baud-rate을 맞춰야 함
 - Reciever의 ACK(resp) 없음; **수신양호** 확인불가
-
-<img "src=./image.png" >
