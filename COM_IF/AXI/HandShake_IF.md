@@ -22,12 +22,22 @@
 
 <table>
 <tr>
- <td align="left"><img src="IMG/img3.png" width=400 height = 200></td>
  <td align="right"><img src="IMG/img4.png" width=400 height = 200></td>
 </tr>
 </table>
 
 - Handshake Buffer가 Cascade 되는 경우 OR-Gate에 의해 타이밍 위반이 발생하므로(Left), 이를 방지하기 위해 버퍼를 삽입함(Right)
+
+<table>
+<tr>
+ <td align="right"><img src="IMG/img6.png" width=400 
+ height = 200></td>
+ <td align="right"><img src="IMG/img6.jpg" width=400 height = 200></td>
+</tr>
+</table>
+
+- Skid Buffer는 ~ready 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready 상태(SKID)가 지속되는 한 이전 데이터를 Skid Buffer에 저장함 **(Pipeline Stall)**
+- ready가 HIGH가 되면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
 
 ## 3. I/F 장단점
 
