@@ -26,7 +26,7 @@
 </tr>
 </table>
 
-- Handshake Buffer가 Cascade 되는 경우 OR-Gate에 의해 타이밍 위반이 발생하므로(Left), 이를 방지하기 위해 버퍼를 삽입함(Right)
+- Handshake Buffer가 Cascade 되는 경우 OR-Gate에 의해 타이밍 위반이 발생하므로, 이를 방지하기 위해 버퍼를 삽입함
 
 <table>
 <tr>
