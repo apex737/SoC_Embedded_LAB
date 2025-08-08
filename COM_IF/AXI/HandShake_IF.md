@@ -38,8 +38,8 @@
 </table>
 
 - **ready = ~m_valid | m_ready**
-- Skid Buffer는 ~ready 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready 상태(SKID)가 지속되는 한 이전 데이터를 Skid Buffer에 저장함 **(Pipeline Stall)**
-- ready가 HIGH가 되면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
+- ready는 조합논리; **m_valid_o, m_data_o는 registered output**이므로 **~ready 직전의 출력은 유실됨**
+- Skid Buffer는 ~ready 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready 상태(SKID)가 지속되는 한 이전 데이터를 Skid Buffer에 저장 및 **Pipe Stall**; 이후, ready 상태가 되면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
 
 ## 3. I/F 장단점
 
