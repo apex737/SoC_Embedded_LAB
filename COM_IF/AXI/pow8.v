@@ -11,17 +11,17 @@ module pow8(
 	output [63:0] m_data 		
 );
 
-assign s_ready = ~m_valid | m_ready;
-
+wire m_ready_o, m_valid_i;
+wire [63:0] m_data_i;
 reg [2:0] r_valid;
 reg [63:0] r_data [0:2];
+assign s_ready = ~m_valid_i | m_ready_o;
 
 // valid register
 always@(posedge clk or negedge rstn) begin
 	if(~rstn) r_valid <= 0;
 	else if(s_ready)  r_valid <= {r_valid[1:0], s_valid}; 
 end
-assign m_valid = r_valid[2];
 
 // data register
 integer i;
@@ -33,6 +33,20 @@ always@(posedge clk or negedge rstn) begin
 		r_data[0] <= s_data*s_data;
 	end
 end
-assign m_data = r_data[2];
 
+assign m_valid_i = r_valid[2];
+assign m_data_i = r_data[2];
+skid #(64) u_skid 
+(
+	.clk(clk),
+	.rst(rstn),
+	// Slave I/F (LHS)
+	.s_valid(m_valid_i),
+	.s_ready(m_ready_o), // slave output
+	.s_data(m_data_i),
+	// Master I/F (RHS) 
+	.m_valid(m_valid),
+	.m_ready(m_ready),  // master output
+	.m_data(m_data)
+);	
 endmodule
