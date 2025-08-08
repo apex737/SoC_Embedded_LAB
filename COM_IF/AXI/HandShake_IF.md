@@ -23,6 +23,8 @@
 <table>
 <tr>
  <td align="right"><img src="IMG/img4.png" width=400 height = 200></td>
+ <td align="right"><img src="IMG/img6.png" width=250 
+ height = 200></td>
 </tr>
 </table>
 
@@ -30,9 +32,8 @@
 
 <table>
 <tr>
- <td align="right"><img src="IMG/img6.png" width=400 
- height = 200></td>
  <td align="right"><img src="IMG/img6.jpg" width=400 height = 200></td>
+  <td align="left"><img src="IMG/img7.jpg" width=400 height = 200></td>
 </tr>
 </table>
 
