@@ -19,7 +19,7 @@
 
 > Sync-Domain의 클럭이 Async Signal의 Metastable Data(meta)를 캡처하는 문제
 
-**1) Syncronizer**
+**1. Syncronizer**
 
 > meta는 결국 하나의 값으로 결정(안정)되나, 문제는 그 결과를 예측할 수 없다는 것이다.
 
@@ -29,7 +29,7 @@
   - **0 -> meta -> 0:** 운나쁘게 값이 의도대로 출력되지 않음 -> 다음 클럭부터 meta가 아닌 안정된 1이 들어오므로 okay
   - **이로써, meta 문제가 단순 2-클럭 지연으로 바뀐다.**
 
-**2) Bin2Gray**
+**2. Bin2Gray**
 
 > multi-bit 전송에서 metastability 문제의 해법
 
