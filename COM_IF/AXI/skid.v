@@ -37,12 +37,12 @@ always@(posedge clk) begin
 					state <= PIPE;
 					s_data_r <= s_data;
 					s_valid_r <= s_valid;
-					s_ready_r <= ready;
+					s_ready_r <= 1'b1;
 				end else begin
 					state <= SKID;
 					s_data_d <= s_data;
 					s_valid_d <= s_valid;
-					s_ready_r <= ~ready;
+					s_ready_r <= 1'b0;
 				end
 			end
 			SKID: begin
@@ -58,7 +58,7 @@ always@(posedge clk) begin
 end
 
 assign m_data = s_data_r;
-assign m_valid = s_data_r;
+assign m_valid = s_valid_r;
 assign s_ready = s_ready_r;
 
 
