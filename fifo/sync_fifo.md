@@ -15,5 +15,8 @@
 
 #### 3. Configuration
 
-- Strobe (full, empty)
-- Round (Circulate Flag)
+- **Round (Circulate Flag)**
+  - FIFO를 1바퀴를 순회하면 토글되는 레지스터
+  - **Strobe**
+    - **full:** (wptr_round != rptr_round) && (wptr == rptr);
+    - **empty:** (wptr_round == rptr_round) && (wptr == rptr);

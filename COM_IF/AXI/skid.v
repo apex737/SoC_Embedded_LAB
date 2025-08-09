@@ -2,12 +2,12 @@ module skid
 #(parameter DWIDTH = 8)
 (
 	input clk, rst,
-	// slave 
+	// slave side
 	input s_valid,
 	output s_ready,
 	input [DWIDTH-1:0] s_data,
  
-	// master
+	// master side
 	output m_valid,
 	input m_ready,
 	output [DWIDTH-1:0] m_data

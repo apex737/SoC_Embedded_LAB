@@ -20,6 +20,8 @@
 
 ## 2. Skid Buffer
 
+> Registerd I/O와 Combinational I/O가 하나의 채널로 들어오는 경우에 대한 타이밍 문제를 어떻게 해결할 것인가?
+
 <table>
 <tr>
  <td align="right"><img src="IMG/img4.png" width=400 height = 200></td>
@@ -38,8 +40,9 @@
 </table>
 
 - **ready = ~m_valid | m_ready**
-- ready는 조합논리; **m_valid_o, m_data_o는 registered output**이므로 **~ready 직전의 출력은 유실됨**
-- **Skid(보라색 F/F)** 는 ~ready(LOW) 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready(LOW) 가 지속되는 한 이전 데이터를 Skid에 저장하고 **Pipe Stall**; 이후, ready가 HIGH이면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
+- ready는 Combinational Input인 반면, **m_valid_o, m_data_o는 registered Output**이므로 **~ready 직전의 출력이 유실되는 문제가 발생함**
+- 이 문제를 해결하기 위해 **Skid(보라색 F/F)** 도입
+- **Skid**는 ~ready(LOW) 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready(LOW) 가 지속되는 한 이전 데이터를 Skid에 저장하고 **Pipe Stall**; 이후, ready가 HIGH로 변하면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
 
 ## 3. I/F 장단점
 
