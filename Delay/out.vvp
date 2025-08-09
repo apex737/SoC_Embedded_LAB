@@ -1,0 +1,94 @@
+$date
+	Sat Aug  9 09:12:00 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module tb_test2 $end
+$var wire 2 ! data_o [1:0] $end
+$var wire 2 " data_d [1:0] $end
+$var reg 1 # clk $end
+$var reg 2 $ data [1:0] $end
+$var reg 1 % rstn $end
+$scope module u_test $end
+$var wire 1 # clk $end
+$var wire 2 & data [1:0] $end
+$var wire 2 ' data_o [1:0] $end
+$var wire 1 % rstn $end
+$var reg 2 ( data_d [1:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx (
+bx '
+bx &
+1%
+bx $
+0#
+bx "
+bx !
+$end
+#5
+b0 "
+b0 (
+0%
+#10
+bx "
+bx (
+1%
+1#
+#20
+0#
+#30
+b11 "
+b11 (
+b11 !
+b11 '
+b11 $
+b11 &
+1#
+#40
+0#
+#50
+b10 "
+b10 (
+b10 !
+b10 '
+b10 $
+b10 &
+1#
+#60
+0#
+#70
+b1 "
+b1 (
+b1 !
+b1 '
+b1 $
+b1 &
+1#
+#80
+0#
+#90
+b0 "
+b0 (
+b0 !
+b0 '
+b0 $
+b0 &
+1#
+#100
+0#
+#110
+1#
+#120
+0#
+#130
+1#
+#140
+0#
