@@ -170,11 +170,13 @@ always @(posedge clk) begin
 end
 
 // Call DUT
-sync_fifo 
+sync_fifo_skid
 # (
+	.REG_IN(1),
+	.REG_OUT(1),
 	.SIZE(32),
 	.DEPTH     (4)
-) u_sync_fifo (
+) u_sync_fifo_skid (
 	.clk			(clk),
 	.rstn			(~reset),
 

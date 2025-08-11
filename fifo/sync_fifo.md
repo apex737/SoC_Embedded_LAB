@@ -7,7 +7,7 @@
 
 #### 2. Latency Balancing
 
-<img src=img1.png>
+<img src=img1.png width=500 height=300>
   
 - 데이터를 A, B 채널로 나눠서 처리한 뒤 합치는 경우 Latency 차이에 의해 더 빠른 쪽(B 채널)이 멈추는 상황이 발생함
 - 채널 하나가 막히면 Split-Input이 멈추고, 이로 인해 새로운 입력도 멈추는 상황이 발생함 **(Deadlock)**
@@ -15,8 +15,15 @@
 
 #### 3. Configuration
 
+<img src=img2.jpg width=500 height=300>
+
+- **Skid Buffer**
+  - 경계에 해당되는 FIFO I/O Interface는 **Skid Buffer에게 위임**
+  - 내부 wire **(w\_)**
+    - 인스턴스화를 하는 경우 Skid Buffer의 I/O 포트와 연결
+    - 인스턴스화를 하지 않는 경우 FIFO의 I/O Interface에 직접 연결
 - **Round (Circulate Flag)**
   - FIFO를 1바퀴를 순회하면 토글되는 레지스터
   - **Strobe**
-    - **full:** (wptr_round != rptr_round) && (wptr == rptr);
-    - **empty:** (wptr_round == rptr_round) && (wptr == rptr);
+    - **full(~s_ready):** (wptr_round != rptr_round) && (wptr == rptr);
+    - **empty(~m_valid):** (wptr_round == rptr_round) && (wptr == rptr);
