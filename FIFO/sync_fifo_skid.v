@@ -23,11 +23,11 @@ module sync_fifo_skid
 );
 
 reg [SIZE-1:0] fifo [0:DEPTH-1];
-// ptr for descript fifo state
+// ptr to descript fifo state
 reg [LOG2DEPTH-1:0] wptr, wptr_nxt, wptr_round, wptr_round_nxt;
 reg [LOG2DEPTH-1:0] rptr, rptr_nxt, rptr_round, rptr_round_nxt;
 
-// I/O Ports for Instanciate Skid Buffer
+// I/O Ports to Instanciate Skid Buffer
 wire w_s_valid, w_s_ready, w_m_valid, w_m_ready;
 wire [SIZE-1:0] w_m_data, w_s_data;
 
