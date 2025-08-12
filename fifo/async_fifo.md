@@ -33,13 +33,13 @@
 
 > multi-bit 전송에서 metastability 문제의 해법
 
-- 영역 A의 wptr, 영역 B의 rptr은 binary 카운터처럼 동작한다. 그러나, Async-FIFO 내부의 ptr 송수신에서까지 binary 방식으로 전달하면 치명적인 문제가 발생할 수 있다.
+- 영역 A의 wptr, 영역 B의 rptr은 binary 카운터처럼 동작한다. **그러나, Async-FIFO 내부의 ptr 송수신에서까지 binary 방식으로 전달하면 치명적인 문제가 발생할 수 있다.**
 - 예컨대, 카운터가 011(bin_3) -> 100(bin_4) 으로 바뀌는 경우 3개의 신호선 모두 meta를 가지기 때문에 000에서 111까지 모든 값이 출력될 수 있어서, 시스템이 망가질 수 있다.
-- 반면에, 010(gray_3) -> 110(gray_4) 으로 카운터가 바뀌는 경우 1-bit만 변화하기 때문에 앞의 1-bit 상황으로 문제를 축소할 수 있다.
+- 반면에, 010(gray_3) -> 110(gray_4) 으로 카운터가 바뀌는 경우 1-bit만 변화하기 때문에 앞의 **1-bit 상황으로 문제를 축소할 수 있다.**
   - **010 -> meta -> 110:** 운좋게 값이 의도대로 잘 출력됨 -> okay
   - **010 -> meta -> 010:** 운나쁘게 값이 의도대로 출력되지 않음 -> 다음 클럭에는 meta가 아닌 안정된 값이 들어오므로 okay
   - **이로써, meta 문제가 단순 2-클럭 지연으로 바뀐다.**
-- 단, **gray-code** 는 통신을 위해 변환된 허상의 값이며, fifo에 읽고 쓰는 실체는 ptr이다.
+- 단, **gray-code** 는 CDC를 위해 변환된 허상의 값이며, fifo에 읽고 쓰는 실체는 ptr이다.
 
 ```verilog
 /*      Implement
@@ -65,65 +65,65 @@ module async_fifo_8x8 (
    output empty
 );
 
-reg [7:0] circular_fifo [0:7];
+reg [7:0] fifo [0:7];
 
 // wclk (쓰는 속도)가 rclk (읽는 속도)보다 빠르면 ovf, 느리면 udf 발생 가능
-// 이걸 제어하기 위한 신호가 full과 empty이며 이 Strob를 정의하기 위해서 ptr 통신이 필요함
+// 이걸 제어하기 위한 신호가 full과 empty이며, 이 Strobe를 정의하기 위해 ptr CDC 필요
 wire full  = wptr_gray[3:2] == ~rptr_gray_wclk[3:2] &&
-             wptr_gray[1:0] == rptr_gray_wclk[1:0]; /*    Ex. bin         bin + N
+             wptr_gray[1:0] == rptr_gray_wclk[1:0]; /*    Ex. bin         bin + N (full)
                                                    raw        00011       10011
-                                                   shifted    00001       01001
+                                                  Rshifted    00001       01001
                                                    xor        00010       11010
                                                        상위 2-bit은 반전관계 && 나머지 일치 */
 wire empty = rptr_gray == wptr_gray_rclk;
 
 //////////////////////// Write-Side ////////////////////////
-reg [3:0] wptr, wptr_meta, wptr_rclk; // w-영역의 ptr은 meta 상태를 거쳐서 r-영역에 도달
+reg [3:0] wptr, wptr_gray_meta, wptr_gray_rclk; // w-영역의 ptr은 meta 상태를 거쳐서 r-영역에 도달
 wire wptr_gray;
 integer i;
 
 always@(posedge wclk or negedge rstn) begin
    if(~rstn) begin
-      for(i=0;i<8;i=i+1) circular_fifo[i] <= 0;
+      for(i=0;i<8;i=i+1) fifo[i] <= 0;
       wptr <= 0;
    end
    else if(push && ~full) begin
-      circular_fifo[wptr[2:0]] <= din;
+      fifo[wptr[2:0]] <= din;
       wptr <= wptr + 1;
    end
 end
 
-// Write-Side 2-ff Synchronizer (W->R Channel)
+// Write-Side 2-ff Synchronizer (W->R)
 always@(posedge wclk or negedge rstn) begin
    if(~rstn) begin
-      wptr_meta <= 0;
-      wptr_rclk <= 0;
+      wptr_gray_meta <= 0;
+      wptr_gray_rclk <= 0;
    end else begin
-      wptr_meta <= wptr_gray;
-      wptr_rclk <= wptr_meta;
+      wptr_gray_meta <= wptr_gray;
+      wptr_gray_rclk <= wptr_gray_meta;
    end
 end
 
 //////////////////////// Read Side ( Write Size와 대칭 ) ////////////////////////
-reg rptr, rptr_meta, rptr_wclk; // r-영역의 ptr은 meta 상태를 거쳐서 w-영역에 도달
+reg rptr, wptr_gray_meta, wptr_gray_wclk; // r-영역의 ptr은 meta 상태를 거쳐서 w-영역에 도달
 wire rptr_gray;
 
 always@(posedge rclk or negedge rstn) begin
    if(~rstn) rptr <= 0;
    else if(pop && ~empty) begin
-      dout <= circular_fifo[rptr[2:0]];
+      dout <= fifo[rptr[2:0]];
       rptr <= rptr + 1;
    end
 end
 
-// Read-Side 2-ff Synchronizer (R->W Channel)
+// Read-Side 2-ff Synchronizer (R->W)
 always@(posedge rclk or negedge rstn) begin
    if(~rstn) begin
-      rptr_meta <= 0;
-      rptr_wclk <= 0;
+      wptr_gray_meta <= 0;
+      wptr_gray_wclk <= 0;
    end else begin
-      rptr_meta <= rptr_gray;
-      rptr_wclk <= rptr_meta;
+      wptr_gray_meta <= rptr_gray;
+      wptr_gray_wclk <= wptr_gray_meta;
    end
 end
 
