@@ -17,22 +17,12 @@ assign data_o = data;
 endmodule
 ```
 
-<img src="out_normal.png">
-
-- **data_o**는 assign 출력이고, **data_d**는 registered output이므로 위와 같이 1 클럭 딜레이된 출력을 기대한다.
+- **data_o**는 assign 출력이고, **data_d**는 registered output이므로 1 클럭 딜레이된 출력을 기대한다.
 
 ```verilog
 module tb_test;
-reg clk, rstn;
-reg [1:0] data, data_d, data_o;
-test u_test (clk, rstn, data, data_d, data_o);
-
-always #10 clk = ~clk;
-
+// ~~ I/O PORT & GEN CLK
 initial begin
-    $dumpfile("out.vvp");
-    $dumpvars(0, tb_test);
-
     // 초기값 설정
     clk = 0;
     rstn = 1'b1; #5;
@@ -42,18 +32,20 @@ initial begin
     @(posedge clk); data = 1;
     @(posedge clk); data = 2;
     @(posedge clk); data = 3;
-
     #50;
     $finish;
 end
 endmodule
 ```
 
-- 그러나 클럭 에지 이후 딜레이를 걸어주지 않으면 데이터가 갱신될때 클럭도 함께 튀는 **경합 조건(race-condition)** 이 발생하여, 다음과 같이 output reg가 마치 조합논리처럼 거동하는 오류가 일어난다.
+- 그러나 위와 같이 클럭 에지 이후 딜레이를 걸어주지 않으면 데이터가 갱신될때 클럭도 함께 튀는 **경합 조건(race-condition)** 이 발생하여, **좌측**과 같이 output reg가 마치 조합논리처럼 거동하는 오류가 일어난다.
 
-<img src="out_race_condition.png">
+<table>
+<td text-align="left"><img src="out_race_condition.png"></td>
+<td text-align="right"><img src="out_normal.png"></td>
+</table>
 
-- 이를 방지하기 위해 아래와 같이 **@(posedge clk) 이후 delay**를 넣는다.
+- 이를 방지하기 위해 다음과 같이 **@(posedge clk) 이후 delay**를 넣으면, **우측**의 결과를 얻는다.
 
 ```verilog
 @(posedge clk); #2; data = 0;

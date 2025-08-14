@@ -25,8 +25,8 @@
 
 1. Bit-Banging (하드코딩, Polling으로 간소화)
 2. UART-Peri (주로 Interrupt 방식)
-   > Ex. STM32 HAL 드라이버; HAL_UART_Receive_IT(&huart, pData, Size) <br>
-   > 병렬 Output -> (Tx Shift Reg) 직렬 Shift Out ----- (Rx Shift Reg) 직렬 Shift In -> 병렬 Input
+   > **Ex. STM32 HAL 드라이버** HAL_UART_Receive_IT(&huart, pData, Size)
+   > **병렬 Output** -> (Tx Shift Reg) 직렬 Shift Out ----- (Rx Shift Reg) 직렬 Shift In -> **병렬 Input**
 
 #### 한계
 

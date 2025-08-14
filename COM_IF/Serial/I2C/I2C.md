@@ -35,7 +35,7 @@
 
 **4. BitSeq3: { Data, ACK }**
 
-- 통신의 목적인 PayLoad
+- 통신의 목적인 PayLoad 송/수신
 - 복수의 패킷을 보낼 수 있으며, 스루풋은 패킷의 수에 비례함
 
 **5. Stop**
@@ -47,9 +47,7 @@
 #### 1. SDA
 
 - **목적: 버스 소유권 중재**
-- SCL-Posedge에서 Bus-State와 비교
-- LOW이면 버스 소유권 포기 (High-Z)
-- **Arbitaration: 마스터들이 전송한 bit와 버스에서 읽히는 bit를 비교**
+- **Arbitaration: 마스터들이 전송한 bit와 버스에서 읽히는 bit를 SCL-Posedge에서 비교**
   - A: 0001010, B: 0000101, C: 0000111
   - 3th-CLK까지는 0으로 같음
   - 4th-CLK에서 A 탈락 **(&100b = 0; 불일치)**
@@ -57,13 +55,15 @@
   - 6th-CLK에서 C 탈락 **(&101b = 0; 불일치)**
   - B가 버스 소유
   - B의 STOP 신호 감지 이후 A,C가 버스를 두고 재경합
-  - **결과적으로 더 작은 주소 Slave 우선** (B -> C -> A)
+  - **MSB부터 비교하며 0이 항상 우세하기 때문에, 결과적으로 더 작은 주소 Slave 우선** (B -> C -> A)
 
 #### 2. SCL
 
 - **목적: Slave와의 타이밍 동기화 (Clock Stretching)**
-- Slave가 Master의 속도를 따라잡지 못하여 **SCL을 LOW로 내리는 것**이 Not-Ready 신호
+- Slave가 Master의 속도를 따라잡지 못하여 **자신의 SCL을 LOW로 내리는 것**이 Not-Ready 신호
 - **마스터의 SCL-Posedge에서 버스-SCLK과 비교**; LOW에서 버스 Stall
-- **I2C의 주요 한계**
-  - AHB의 HSPLIT과 달리, **BottleNeck-Slave에 대한 해법이 따로없음**
-  - 2-wire과 구현의 간단함을 취하고 고성능을 포기 (trade-off)
+
+### I2C의 주요 한계
+
+- AHB의 HSPLIT과 달리, **BottleNeck-Slave에 대한 해법이 따로없음**
+- 2-wire과 구현의 간단함을 취하고 고성능을 포기 (trade-off)
