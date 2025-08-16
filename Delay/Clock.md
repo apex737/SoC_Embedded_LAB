@@ -4,6 +4,25 @@
 
 <img src="IMG/one_tick.png" width=600 height=250>
 
+- Fclk = 100MHz라면, 실제 implement에서는 i_freq를 25M, 50M 등 큰 값으로 주어야함
+- SIM에서는 큰 i_freq를 주면 관찰하기 어렵기 때문에 전처리문으로 간략화
+
+```verilog
+`ifdef XSIM
+wire [31:0] w_i_freq_25M 	= 32'd25;
+wire [31:0] w_i_freq_50M 	= 32'd50;
+`else // Implementation
+wire [31:0] w_i_freq_25M 	= 32'd25000000; // 0.5초 주기로 blink
+wire [31:0] w_i_freq_50M 	= 32'd50000000; // 1초 주기로 blink
+`endif
+```
+
+```
+// define
+xvlog ./top.v ./tb.v ./main.v -d XSIM   // vivado
+iverilog -DXSIM ./top.v ./tb.v ./main.v // icarus
+```
+
 ## Parellel Style (clock_arch1)
 
 > **one_sec_tick**으로 freq를 조정하여 1초 Tick을 생성하고, 이를 sec_tick, min_tick, hour_tick에 병렬적으로 반영하는 방식으로, 구조가 간단하지만 조합논리 Depth가 깊어서 Fmax의 제약이 있음.
