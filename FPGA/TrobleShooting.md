@@ -14,3 +14,8 @@
 - 기타 문제
   - HW 서버가 보안 프로그램에 막히는 경우
   - 케이블 연결 불량
+
+#### 비동기 리셋
+
+- xilinx coding convention은 비동기 리셋에서 **포트명: reset_n** 을 표준으로 함
+  - zynq-ip의 reset_n 포트를 customized ip의 rstn과 연결하면 invalid error가 발생할 수 있음

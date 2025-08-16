@@ -25,6 +25,7 @@
 - **Mux**
 
 **2. IOB (Input/Output Buffer) :** 외부 소자들과 통신하기 위한 버퍼
+
 **3. Programmable Interconnect (Vertical/Horizontal Routing Channel) :** 라우팅 경로 최적화(필요한 경로만 선택)
 
 ---
@@ -51,6 +52,8 @@
 
 1. **vivado proj 생성**
 2. **(필요한 경우) ip package customize**
+   - 보드 선택
+   - 소스 파일 Include
 3. **block design 생성 (ip integration)**
    - zynq ip 생성
      - 사용할 PS 영역 선택 & 전압 설정

@@ -1,22 +1,3 @@
-//////////////////////////////////////////////////////////////////////////////////
-// Company: Personal
-// Engineer: Matbi / Austin
-//
-// Create Date:
-// Design Name: tb_lab5_matbi
-// Module Name: tb_lab5_matbi
-// Project Name:
-// Target Devices: Zybo Z7-20
-// Tool Versions:
-// Description: LED Test Testbench
-// Dependencies:
-//
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 `timescale 1ns / 1ps
 
 module tb_lab5_matbi();
