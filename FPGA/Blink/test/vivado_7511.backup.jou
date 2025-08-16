@@ -1,0 +1,59 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Aug 16 13:36:49 2025
+# Process ID: 7511
+# Current directory: /mnt/d/SoC_Embedded_LAB/FPGA/Blink/test
+# Command line: vivado
+# Log file: /mnt/d/SoC_Embedded_LAB/FPGA/Blink/test/vivado.log
+# Journal file: /mnt/d/SoC_Embedded_LAB/FPGA/Blink/test/vivado.jou
+# Running On: BRANDUN, OS: Linux, CPU Frequency: 2188.799 MHz, CPU Physical cores: 8, Host memory: 8160 MB
+#-----------------------------------------------------------
+start_gui
+create_project Blink_Implement /mnt/d/Xilinx_Linux/tools/Vivado/2022.2/Projects/Blink_Implement -part xc7z010clg400-1
+set_property board_part digilentinc.com:arty-z7-10:part0:1.1 [current_project]
+add_files -fileset constrs_1 -norecurse /home/apex737/Arty-Z7-10-Master.xdc
+import_files -fileset constrs_1 /home/apex737/Arty-Z7-10-Master.xdc
+set_property  ip_repo_paths  /mnt/d/Xilinx_Linux/tools/Vivado/2022.2/Projects/Blink_IP [current_project]
+update_ip_catalog
+set_property dataflow_viewer_settings "min_width=16"   [current_fileset]
+create_bd_design "design_1"
+update_compile_order -fileset sources_1
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0
+endgroup
+startgroup
+create_bd_cell -type ip -vlnv localdomain:user:Blink:1.0 Blink_0
+endgroup
+set_property location {1 145 -173} [get_bd_cells processing_system7_0]
+set_property location {1 258 -365} [get_bd_cells Blink_0]
+set_property location {1.5 456 -98} [get_bd_cells Blink_0]
+connect_bd_net [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins Blink_0/clk]
+connect_bd_net [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins Blink_0/rstn]
+startgroup
+make_bd_pins_external  [get_bd_pins Blink_0/led] [get_bd_pins Blink_0/sw]
+endgroup
+set_property name sw [get_bd_ports sw_0]
+set_property name led [get_bd_ports led_0]
+apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_preset "1" Master "Disable" Slave "Disable" }  [get_bd_cells processing_system7_0]
+startgroup
+set_property -dict [list \
+  CONFIG.PCW_ENET0_PERIPHERAL_ENABLE {0} \
+  CONFIG.PCW_GPIO_MIO_GPIO_ENABLE {0} \
+  CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1} \
+  CONFIG.PCW_QSPI_PERIPHERAL_ENABLE {0} \
+  CONFIG.PCW_SD0_PERIPHERAL_ENABLE {0} \
+  CONFIG.PCW_UART0_PERIPHERAL_ENABLE {0} \
+  CONFIG.PCW_USB0_PERIPHERAL_ENABLE {0} \
+] [get_bd_cells processing_system7_0]
+endgroup
+startgroup
+set_property CONFIG.PCW_USE_M_AXI_GP0 {0} [get_bd_cells processing_system7_0]
+endgroup
+validate_bd_design
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0
+endgroup
+delete_bd_objs [get_bd_cells proc_sys_reset_0]
+validate_bd_design

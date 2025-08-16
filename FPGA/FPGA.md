@@ -50,11 +50,11 @@
 <img src="PS_PL.png" width=500 height=500>
 
 1. **vivado proj 생성**
-2. **(필요한 경우) ip custom package**
+2. **(필요한 경우) ip package customize**
 3. **block design 생성 (ip integration)**
    - zynq ip 생성
      - 사용할 PS 영역 선택 & 전압 설정
-   - custom ip package와 zynq ip 연결
+   - custom ip package 추가 & zynq ip와 연결 (clk, rst 등)
    - F6 (Validation Check)
    - Wrapper & Bitstream 생성
 4. **Export HW (Bitstream 포함)**
