@@ -54,7 +54,6 @@ end
 
 
 //////////////////  input model /////////////////   
-// This code is referenced by chapter 14 in Verilog Season 1.
 /////// Local Param. to define state ////////
 localparam S_IDLE	= 2'b00;
 localparam S_RUN	= 2'b01;
@@ -84,7 +83,7 @@ begin
 	S_RUN : if(is_i_done)
 				n_i_state = S_DONE;
 			else 
-				n_i_state = S_RUN; // Sorry to Everyone! Matbi is a human. u.u Fixed Bug!! To wait is_done.
+				n_i_state = S_RUN; 
 	S_DONE: n_i_state = S_IDLE;
 	endcase
 end 
@@ -137,7 +136,7 @@ begin
 	S_RUN : if(is_o_done)
 				n_o_state = S_DONE;
 			else 
-				n_o_state = S_RUN; // Sorry to Everyone! Matbi is a human. u.u Fixed Bug!! To wait is_done.
+				n_o_state = S_RUN; 
 	S_DONE: n_o_state = S_IDLE;
 	endcase
 end 
@@ -178,7 +177,7 @@ sync_fifo_skid
 	.DEPTH     (4)
 ) u_sync_fifo_skid (
 	.clk			(clk),
-	.rstn			(~reset),
+	.reset_n			(~reset),
 
 	.s_valid		(s_valid),
 	.s_ready		(s_ready),

@@ -9,7 +9,7 @@ module sync_fifo_skid
   parameter LOG2DEPTH = $clog2(DEPTH)
 )
 (
-  input clk, rstn,
+  input clk, reset_n,
   // slave side
   input s_valid,
 	output s_ready,
@@ -43,8 +43,8 @@ wire o_hs = w_m_valid && w_m_ready;
 
 // Write_When (always_ff)
 integer i;
-always@(posedge clk or negedge rstn) begin
-  if(~rstn) begin
+always@(posedge clk or negedge reset_n) begin
+  if(~reset_n) begin
     for(i=0;i<DEPTH;i=i+1) fifo[i] <= 0;
     wptr <= 0;
     wptr_round <= 0;
@@ -66,8 +66,8 @@ always@* begin
 end
 
 // Read_When (always_ff)
-always@(posedge clk or negedge rstn) begin
-  if(~rstn) begin
+always@(posedge clk or negedge reset_n) begin
+  if(~reset_n) begin
     rptr <= 0;
     rptr_round <= 0;
   end else if (o_hs) begin
@@ -93,7 +93,7 @@ generate
       .DWIDTH(SIZE)
     ) u_skid_in (
       .clk(clk),
-      .rst(~rstn),
+      .rst(~reset_n),
       // skid input port : Delegation Connection
       .s_valid(s_valid),
       .s_ready(s_ready),
@@ -116,7 +116,7 @@ generate
       .DWIDTH(SIZE)
     ) u_skid_out (
       .clk(clk),
-      .rst(~rstn),
+      .rst(~reset_n),
       // skid input port : Functional Connection
       .s_valid(w_m_valid),
       .s_ready(w_m_ready),

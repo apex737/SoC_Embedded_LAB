@@ -1,5 +1,5 @@
 module clock_arch1 (
-  input clk, rst, en,
+  input clk, reset, en,
   output reg [5:0] sec_cnt, // clog2(60)
   output reg [5:0] min_cnt, // clog2(60)
   output reg [4:0] hour_cnt // clog2(24)
@@ -7,7 +7,7 @@ module clock_arch1 (
 
 wire w_sec_tick;
 gen_sec u_gen_sec (
-  clk, rst, en, w_sec_tick
+  clk, reset, en, w_sec_tick
 );
 
 wire sec_th = sec_cnt == 60-1;
@@ -15,7 +15,7 @@ wire min_th = min_cnt == 60-1;
 wire hour_th = hour_cnt == 24-1;
 
 always@(posedge clk) begin
-  if(rst) begin
+  if(reset) begin
     sec_cnt <= 0;
     min_cnt <= 0;
     hour_cnt <= 0;

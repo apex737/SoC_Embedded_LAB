@@ -171,7 +171,7 @@ end
 // Call DUT
 pow8 u_power_of_8_hs(
   .clk (clk),
-  .rstn (~reset), // rst connect
+  .reset_n (~reset), // rst connect
 	.s_valid (s_valid),
 	.s_ready (s_ready),
   .s_data (s_value),

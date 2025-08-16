@@ -1,5 +1,5 @@
 module pow8(
-	input clk, rstn,
+	input clk, reset_n,
 	// Slave-Side
 	input s_valid,
 	output s_ready,
@@ -18,15 +18,15 @@ reg [63:0] r_data [0:2];
 assign s_ready = ~m_valid_o | m_ready_i;
 
 // valid register
-always@(posedge clk or negedge rstn) begin
-	if(~rstn) r_valid <= 0;
+always@(posedge clk or negedge reset_n) begin
+	if(~reset_n) r_valid <= 0;
 	else if(s_ready)  r_valid <= {r_valid[1:0], s_valid}; 
 end
 
 // data register
 integer i;
-always@(posedge clk or negedge rstn) begin
-	if(~rstn) for(i=0;i<3;i=i+1) r_data[i] <= 0;
+always@(posedge clk or negedge reset_n) begin
+	if(~reset_n) for(i=0;i<3;i=i+1) r_data[i] <= 0;
 	else if(s_ready) begin
 		r_data[2] <= r_data[1]*r_data[1];
 		r_data[1] <= r_data[0]*r_data[0];
@@ -39,7 +39,7 @@ assign m_data_o = r_data[2];
 skid #(64) u_skid 
 (
 	.clk(clk),
-	.rst(~rstn), // rst connect
+	.rst(~reset_n), // rst connect
 	// Slave Side 
 	.s_valid(m_valid_o),
 	.s_ready(m_ready_i), // skid_out -> pow8_in

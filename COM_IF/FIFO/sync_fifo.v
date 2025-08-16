@@ -5,7 +5,7 @@ module sync_fifo
 	parameter LOG2DEPTH = $clog2(DEPTH)
 )
 (
-	input clk, rstn,
+	input clk, reset_n,
 	// slave side
 	input s_valid,
 	output s_ready,
@@ -25,8 +25,8 @@ integer i;
 // Write Side
 // Write: Sequential Logic
 wire w_hs = s_valid & s_ready;
-always@(posedge clk or negedge rstn) begin
-	if(~rstn) begin
+always@(posedge clk or negedge reset_n) begin
+	if(~reset_n) begin
 		for(i=0;i<DEPTH;i=i+1) fifo[i] <= 0;
 		wptr <= 0;
 		wptr_round <= 0;
@@ -51,8 +51,8 @@ end
 // Read Side
 // Read: Sequential Logic
 wire r_hs = m_valid & m_ready;
-always@(posedge clk or negedge rstn) begin
-	if(~rstn) begin
+always@(posedge clk or negedge reset_n) begin
+	if(~reset_n) begin
 		rptr <= 0;
 		rptr_round <= 0;
 	end else if(r_hs) begin
