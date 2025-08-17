@@ -1,0 +1,90 @@
+70000000 // MOVI R0, #0 
+70400001 
+70800002
+70C00003
+71000004
+71400005 // MOVI R5, #5
+71800006 // MOVI R6, #6
+71C00007 // MOVI R7, #7
+72000008 // MOVI R8, #8
+72400009 // MOVI R9, #9 
+7280000A // MOVI R10 #10
+72C0000B
+7300000C
+7340000D
+7380000E
+73C0000F
+74000010
+74400011 // MOVI R17 #17 X	
+748000D8 // MOVI R18 #216 (LINE 19)
+88240003 // BR_NONZero : if(R[0] != 0) branch to Line 55 (PC = R[18])
+74C00013 // MOVI R19 #19 
+75000014 //  MOVI R20 #20  ( LINE 22 ) 
+75400015 //  MOVI R21 #21 
+75800016
+75C00017
+76000018
+76400019
+7680001A // MOVI R26, #26
+97FA1002 // BRL_Zero : if(R[1] == 0) LINK BACK to R[29] (LINE 59) &  R31 = 116
+7700001C 
+7740001D
+7780001E
+77C0001F // MOVI R31, #31 
+00021000 // ADD r0, r1, r1   : r0 = 2
+08420001 // ADDI r1, r1, #1  : r1 = 2
+10843000 // SUB r2, r2, r3 : r2 = -1
+18C03000 // NEG r3, r3  : r3 = -3 
+21004000 // NOT r4, r4 : r4 = ~4 (-5)
+294A6000 // AND r5, r5, r6 : r5 = 5 & 6
+318C0007 // ANDI r6, r6, #7 : r6 = 6 & 7
+39CE8000 // OR r7, r7, r8 : r7 = r7 | r8
+42100009 // ORI R8, R8, #9 : R8 = R8 | 9
+4A52A000 // XOR R9, R9, R10 : R9 = R9 ^ R10
+52941020 // LSR R10, R10, R1 : R10 = R10 >> 2 ( i = 1 )
+52D60002 // LSR R11 R11, #2 : R11 = R11 >> 2  ( i = 0 )
+5B181020 // ASR R12, R12, R1 : R12 = R12 >>> 2 ( i = 1 )
+5B5A0002 // ASR R13 R13, #2 : R13 = R13 >>> 2  ( i = 0 )
+639C1020 // SHL R14, R14, R1 : R14 = R14 << 2 ( i = 1 )
+63DE0002 // SHL R15, R15, #2 : R15 = R15 << 2  ( i = 0 )
+6C201020 // ROR R16, R16, R1 : R16 = ROR( R16 , 2 ) ( i = 1 )
+6C620002 // ROR R17, R17, #2 : ROR( R17 , 2 )  ( i = 0 ) ///////// Jump, Branch Test Start
+783FFF78 // Jump to Line 19
+77C00000 // MOVI R31, #0
+77800000 // MOVI R30, #0 
+74C00000 // MOVI R19 #0 (LINE 55)
+7000000A // MOVI R0 #10 
+877FFF70 // JL : JUMP TO LINE 22, LINK NEXT_PC (228) TO R29
+70400000 // MOVI R1 #0  ///////// Load, Store Test Start
+983E0004 // ST R10, #4 (RB == 31) : M(4) = M[1] = R[0] = 10
+9AC6000B // ST R11, #4 (RB != 31)  : M(R[3]+11) = M[2] = R[11] = 2 
+7000000A // MOVI R0 #10 
+74C00000 // MOVI R19 #0 
+AC7E0004 // LD : R17 <-- M[1] = 10
+AC86000B // LD : R18 <-- M[2] = 2
+B13FFF04 // LDR : R4 <-- M[2] = 2
+A77FFF08 // STR : R29 = 228 --> M[4] ///////// HAZARD TEST START
+00001000 // ADD R0, R0, R1 : r0 = 10 + 0    
+00402000 // ADD R1, R0, R2 : r1 = 10 - 1    // TYPE1
+00803000 // ADD R2, R0, R3 : r2 = 10 - 3    // TYPE2
+00C04000 // ADD R3, R0, R4  : r3 = 10 + 2  // TYPE3 
+01005000 // ADD R4, R0, R5 : r4 = 10 + 4   // WB STALL
+B17FFEF0 // LDR R5 <-- M[4] = 228  	// Load-Use Hazard
+098A000A // ADDI R6, R5, #10		// Type1-stall
+09CA000F // ADDI R7, R5, #15		// Type2-stall + 1 WB- stall
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
