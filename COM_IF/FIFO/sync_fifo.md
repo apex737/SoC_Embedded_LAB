@@ -13,7 +13,7 @@
 - 채널 하나가 막히면 Split-Input이 멈추고, 이로 인해 새로운 입력도 멈추는 상황이 발생함 **(Deadlock)**
 - 이 문제는 채널 간 **Latency 차이만큼 FIFO DEPTH를 맞춰주는 것으로 해결 가능**
 
-#### 3. sync_fifo_skid.v (FIFO + Ready/Vaild HS)
+#### 3. sync_fifo_skid.v (FIFO + Ready/Vaild HS + Skid)
 
 <img src=img2.jpg width=500 height=300>
 

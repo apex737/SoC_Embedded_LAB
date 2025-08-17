@@ -40,9 +40,75 @@
 </table>
 
 - **ready = ~m_valid | m_ready**
-- ready는 **Combinational** Input인 반면, m_valid_o, m_data_o는 **Registered** Output이므로 **~ready 직전의 출력이 유실되는 문제가 발생함**
+- ready는 **Combinational** Input인 반면, w_valid_o, w_data_o는 **Registered** Output이므로 **~ready 직전의 출력이 유실되는 문제가 발생함**
 - 이 문제를 해결하기 위해 **Skid(보라색 F/F)** 도입
 - **Skid**는 ~ready(LOW) 상태에서만 활성화되는 **Pipe-Through 레지스터**로, ~ready(LOW) 가 지속되는 한 이전 데이터를 Skid에 저장하고 **Pipe Stall**; 이후, ready가 HIGH로 변하면 **SKID -> PIPE** 로 상태를 전이하면서 데이터를 넘김
+
+```verilog
+module skid
+#(parameter DWIDTH = 8)
+(
+	input clk, reset,
+	// slave side
+	input s_valid,
+	output s_ready,
+	input [DWIDTH-1:0] s_data,
+
+	// master side
+	output m_valid,
+	input m_ready,
+	output [DWIDTH-1:0] m_data
+);
+
+localparam PIPE = 1'b0;
+localparam SKID = 1'b1;
+reg state;
+
+reg s_valid_r, s_valid_d;
+reg s_ready_r;
+reg [DWIDTH-1:0] s_data_r, s_data_d;
+wire ready = ~m_valid | m_ready;
+
+always@(posedge clk) begin
+	if(reset) begin
+		s_valid_r <= 0; s_valid_d <= 0;
+		s_ready_r <= 0;
+		s_data_r <= 0; s_data_d <= 0;
+		state <= PIPE;
+	end else begin
+ 		case(state)
+			PIPE: begin
+				if(ready) begin
+					state <= PIPE;
+					s_data_r <= s_data;
+					s_valid_r <= s_valid;
+					s_ready_r <= 1'b1;
+				end else begin
+					state <= SKID;
+					s_data_d <= s_data;
+					s_valid_d <= s_valid;
+					s_ready_r <= 1'b0;
+				end
+			end
+			SKID: begin
+				if(ready) begin
+					state <= PIPE;
+					s_data_r <= s_data_d;
+					s_valid_r <= s_valid_d;
+					s_ready_r <= ready;
+				end
+			end
+		endcase
+	end
+end
+
+assign m_data = s_data_r;
+assign m_valid = s_valid_r;
+assign s_ready = s_ready_r;
+
+
+endmodule
+```
 
 ## 3. I/F 장단점
 

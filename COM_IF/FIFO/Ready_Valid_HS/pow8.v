@@ -11,11 +11,11 @@ module pow8(
 	output [63:0] m_data 		
 );
 
-wire m_ready_i, m_valid_o;
-wire [63:0] m_data_o;
+wire w_ready_i, w_valid_o;
+wire [63:0] w_data_o;
 reg [2:0] r_valid;
 reg [63:0] r_data [0:2];
-assign s_ready = ~m_valid_o | m_ready_i;
+assign s_ready = ~w_valid_o | w_ready_i;
 
 // valid register
 always@(posedge clk or negedge reset_n) begin
@@ -34,16 +34,16 @@ always@(posedge clk or negedge reset_n) begin
 	end
 end
 
-assign m_valid_o = r_valid[2];
-assign m_data_o = r_data[2];
+assign w_valid_o = r_valid[2]; // registered output
+assign w_data_o = r_data[2];
 skid #(64) u_skid 
 (
 	.clk(clk),
-	.rst(~reset_n), // rst connect
+	.reset(~reset_n), // reset connect
 	// Slave Side 
-	.s_valid(m_valid_o),
-	.s_ready(m_ready_i), // skid_out -> pow8_in
-	.s_data(m_data_o),
+	.s_valid(w_valid_o),
+	.s_ready(w_ready_i), // skid_out -> pow8_in
+	.s_data(w_data_o),
 	// Master Side  
 	.m_valid(m_valid),
 	.m_ready(m_ready),  // skid_in -> pow8_out
