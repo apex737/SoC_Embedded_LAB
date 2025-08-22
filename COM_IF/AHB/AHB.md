@@ -4,7 +4,7 @@
 - __data phase__: Transfer data
 - __2-phase__ 구조를 통해 data-pipelining과 multi-transfer(Burst-Mode)를 구현
 
-### 2) Additional Signals ( APB+ )
+### 2) Control Signals ( APB+ )
 #### < Burst-Mode Signals >
 * __HTRANS[1:0]__ (state)
   * __IDLE__ 
@@ -28,6 +28,7 @@
       * HAddr     = 0x3C -> ~0x44~ -> 0x24 -> 0x3C ...
   
 * __HSIZE[2:0]__: 클럭 당 __주소 증가__ size
+* HPROT
 
 #### < Arbitration Signals >
 > 운영체제의 CPU 스케쥴링, 동기화 개념이 사용됨
