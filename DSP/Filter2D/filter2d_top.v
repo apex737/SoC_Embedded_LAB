@@ -23,6 +23,7 @@ wire cs, we;
 wire [16:0] addr;
 wire [7:0] din;
 wire [7:0] dout;
+
 filter2d i_filter (
 .clk(clk), .n_reset(n_reset), .start(start), .finish(finish),
 .cs(cs), .we(we), .addr(addr), .din(din), .dout(dout),
