@@ -1,6 +1,5 @@
-`define W 256
-
-module filter2d (
+module filter2d #(parameter WIDTH = 256) 
+(
 	input clk,
 	input n_reset,
 	input i_strb,
@@ -32,10 +31,10 @@ always@(posedge clk or negedge n_reset) begin
 	end
 	else begin
 		if(i_strb == 1'b1) begin
-			cnt_x <= (cnt_x == 255) ? 0 : cnt_x+1;
-			if(cnt_x == 255) begin
-				cnt_y <= (cnt_y == 255) ? 0 : cnt_y+1;
-				if(cnt_y == 255) garbage <= 1'b0;
+			cnt_x <= (cnt_x == WIDTH - 1) ? 0 : cnt_x+1;
+			if(cnt_x == WIDTH - 1) begin
+				cnt_y <= (cnt_y == WIDTH - 1) ? 0 : cnt_y+1;
+				if(cnt_y == WIDTH - 1) garbage <= 1'b0;
 			end
 		end
 		
@@ -73,15 +72,15 @@ always@(posedge clk or negedge n_reset) begin
 	end
 end
 
-// `W = 256
+// WIDTH = 256
 wire mem_rd = (cnt == 0) || (cnt == 1); 
 wire mem_wr = (cnt == 2);
 reg [8:0] wr_addr; // c의 주소 (우측 하단)
-// wire [8:0] rd_addr0 = (wr_addr < 2*W) ? (wr_addr-2*W+BUF_LEN) 
-									 //  : wr_addr-2*W;
+// wire [8:0] rd_addr0 = (wr_addr < 2*WIDTH) ? (wr_addr-2*WIDTH+BUF_LEN) 
+									 //  : wr_addr-2*WIDTH;
 
 wire [8:0] rd_addr0 = wr_addr; // a의 주소
-wire [8:0] rd_addr1 = (wr_addr < `W) ? wr_addr+`W : wr_addr-`W; // b의 주소
+wire [8:0] rd_addr1 = (wr_addr < WIDTH) ? wr_addr+WIDTH : wr_addr-WIDTH; // b의 주소
 wire [8:0] rd_addr = (cnt == 0) ? rd_addr0 : rd_addr1;
 
 always@(posedge clk or negedge n_reset) begin
@@ -90,7 +89,7 @@ always@(posedge clk or negedge n_reset) begin
 	end 
 	else begin
 		if(mem_wr == 1'b1) begin
-			wr_addr <= (wr_addr == 2*`W-1) ? 0 : wr_addr + 1;
+			wr_addr <= (wr_addr == 2*WIDTH-1) ? 0 : wr_addr + 1;
 		end
 	end
 end
@@ -101,14 +100,14 @@ wire [7:0] din = i_data_d;
 
 mem_single #(
 .WD(8),
-.DEPTH(2*`W)
+.DEPTH(2*WIDTH)
 ) i_buf0 (
-.clk(clk),
-.cs(cs),
-.we(we),
-.addr(addr),
-.din(din),
-.dout(dout)
+	.clk(clk),
+	.cs(cs),
+	.we(we),
+	.addr(addr),
+	.din(din),
+	.dout(dout)
 );
 
 reg signed [7:0] h[0:8];
@@ -145,13 +144,13 @@ always@(posedge clk or negedge n_reset) begin
 		if((cnt == 3) && (garbage == 1'b0)) begin
 			mul[0][0] <= ((cnt_y > 0) && (cnt_x > 0)) ? ibuf[0][0] * h[0] :1'b0;
 			mul[0][1] <= ((cnt_y > 0) ) ? ibuf[0][1] * h[1] :1'b0;
-			mul[0][2] <= ((cnt_y > 0) && (cnt_x < 255)) ? ibuf[0][2] * h[2] :1'b0;
+			mul[0][2] <= ((cnt_y > 0) && (cnt_x < WIDTH - 1)) ? ibuf[0][2] * h[2] :1'b0;
 			mul[1][0] <= (cnt_x > 0) ? ibuf[1][0] * h[3] :1'b0;
 			mul[1][1] <= ibuf[1][1] * h[4];
-			mul[1][2] <= (cnt_x < 255) ? ibuf[1][2] * h[5] :1'b0; 
-			mul[2][0] <= ((cnt_y < 255) && (cnt_x > 0)) ? ibuf[2][0] * h[6] :1'b0;
-			mul[2][1] <= ((cnt_y < 255) ) ? ibuf[2][1] * h[7] :1'b0;
-			mul[2][2] <= ((cnt_y < 255) && (cnt_x < 255)) ? ibuf[2][2] * h[8] :1'b0;
+			mul[1][2] <= (cnt_x < WIDTH - 1) ? ibuf[1][2] * h[5] :1'b0; 
+			mul[2][0] <= ((cnt_y < WIDTH - 1) && (cnt_x > 0)) ? ibuf[2][0] * h[6] :1'b0;
+			mul[2][1] <= ((cnt_y < WIDTH - 1) ) ? ibuf[2][1] * h[7] :1'b0;
+			mul[2][2] <= ((cnt_y < WIDTH - 1) && (cnt_x < WIDTH - 1)) ? ibuf[2][2] * h[8] :1'b0;
 		end
 	end
 end
@@ -178,9 +177,8 @@ always@(posedge clk or negedge n_reset) begin
 end
 wire [19:0] pd_rnd_1 = sum + (1<<6);
 wire [12:0] pd_rnd = pd_rnd_1[19:7];
-wire [7:0] pd_out = (pd_rnd < 0) ? 0 
-								 : (pd_rnd > 255) ? 255 
-												  : pd_rnd[7:0];
+wire [7:0] pd_out = 
+(pd_rnd < 0) ? 0 : (pd_rnd > WIDTH-1) ? WIDTH-1 : pd_rnd[7:0];
 
 always@(posedge clk or negedge n_reset) begin
 	if(n_reset == 1'b0) begin

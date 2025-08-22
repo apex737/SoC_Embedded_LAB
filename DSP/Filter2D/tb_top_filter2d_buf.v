@@ -7,6 +7,7 @@ reg [7:0] img_data[0:65535];
 reg i_strb;
 reg [7:0] i_data;
 integer idx, cnt;
+
 initial begin
 	cnt = 0;
 	n_reset = 1'b1;
@@ -40,20 +41,21 @@ end
 
 wire o_strb;
 wire [7:0] o_data;
+
 filter2d i_filter (
-.clk(clk),
-.n_reset(n_reset),
-.i_strb(i_strb),
-.i_data(i_data),
-.o_strb(o_strb),
-.o_data(o_data),
-.h_write(1'b0),
-.h_idx(4'b0),
-.h_data(8'b0)
+	.clk(clk),
+	.n_reset(n_reset),
+	.i_strb(i_strb),
+	.i_data(i_data),
+	.o_strb(o_strb),
+	.o_data(o_data),
+	.h_write(1'b0),
+	.h_idx(4'b0),
+	.h_data(8'b0)
 );
 
 always@(posedge clk) begin
-	if(o_strb == 1'b1) begin
+	if(o_strb) begin
 		$write("%3d ", o_data);
 		cnt = cnt + 1;
 		if(cnt[7:0] == 0) begin

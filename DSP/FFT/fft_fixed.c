@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 typedef struct {
-int r, i;
+	int r, i;
 } t_complex;
 
 // 덧셈과 뺄셈에서 bit Rshift
