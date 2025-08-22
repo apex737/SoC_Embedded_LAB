@@ -13,7 +13,9 @@
 - Σ h(k)\*x(n-k); [k = 0 ~ N-1] : MAC 연산
 
 ```c
-float filter(int in)
+
+#include <stdio.h>
+float filter(float in)
 /*
   1. 길이 L인 배열에 시간 차 입력을 받는다
   2. 컨볼루션 연산을 수행한다
@@ -29,24 +31,33 @@ float filter(int in)
     -0.0075198095107301, -0.0090277441097318,  0.00257299891941012, 0.00189666282674638,
     -0.000306021779757585
   };
-  float out = 0;
 
-  x[0] = in;
-  for(int i = 0; i < 21; i++)
+  for(int i = 20; i > 0; i--)
     x[i] = x[i-1]; // RShift
+  x[0] = in;
 
+  float out = 0;
   for(int i = 0; i < 21; i++)
     out += x[i]*h[i];
   return out;
 }
 
 int main(){
-  FILE* inf, outf;
+  FILE* inf = fopen("input.txt", "r");
+  FILE* outf = fopen("output.txt", "w");
+  float in;
+  while(fscanf(inf, "%f" ,&in) > 0) // 주소 전달
+  {
+    float out = filter(in);
+    fprintf(outf, "%.6f\n", out); // 값 전달
+  }
+  fclose(inf);
+  fclose(outf);
 
 }
 ```
 
 ### 2. 검증 (Linux 환경)
 
-- 시뮬레이션/파형: verilator/pyverilator + gtkwave
+- 시뮬레이션/파형: iverilog/verilator/pyverilator + gtkwave
 - 플롯: Numpy, matplotlib, OpenCV, pandas
