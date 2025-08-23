@@ -1,4 +1,4 @@
-y  = load('output.txt');  % 필터를 통과한 시퀀스
+y  = load('output_v.txt');  % 필터를 통과한 시퀀스
 n  = length(y);           % input.txt 샘플 개수, FFT 길이
 Fs = 48000;               % 샘플링 주파수 (48kHz)
 f  = (0:n-1)*(Fs/n);      % 분해능 Δf = Fs/n인 주파수 벡터

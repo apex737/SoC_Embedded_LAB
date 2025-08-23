@@ -6,17 +6,17 @@
 >   - LPF: 노이즈 제거(blur)
 >   - HPF: 엣지 검출(변화 강조)
 
-## 1D-Filter 구현
+## Filter 구현
 
 - 길이 N인 커널 h[k] (N-tap Kernel; 시스템의 Impulse Response)
 - 현재 입력과 이전 M-1 개의 입력을 저장하는 배열 x[n-k]
 - Σ h(k)*x(n-k); [k = 0 ~ M-1] : MAC 연산
-- 구현: [1D-Filter.c](./filter.c)
+- **C 구현**: [Filter.c](./filter.c)
 
 
 ### 검증 (Octave)
 - output.txt 파일을 gnu-octave를 사용하여 검증
-- 구현: [spectrum.m](./spectrum.m)
+- **구현**: [spectrum.m](test/spectrum.m)
 
 <img src="spectrum_out.png" width=500 height=400>
 
@@ -75,5 +75,7 @@ if(out > 32767) out = 32767; // 1 << 15 = 32768
 else if(out < -32767) out = -32767;
 ```
 
-- 구현: [filter_fixed.c](./filter_fixed.c)
-
+- **C 구현**: [filter_fixed.c](test/filter_fixed.c)
+- **Verilog 구현**: 
+  - [filter.v](test/filter.v)
+  - [tb_filter.sv](test/tb_filter.sv)
