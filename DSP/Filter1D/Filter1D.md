@@ -18,49 +18,19 @@
 - output.txt 파일을 gnu-octave를 사용하여 검증
 - **구현**: [spectrum.m](test/spectrum.m)
 
-<img src="spectrum_out.png" width=500 height=400>
+<img src="IMG/spectrum_out.png" width=500 height=400>
 
 # Fixed-Point로 구현
 
-## Fixed-Point MAC
-
-> 표기: **(m, f)** = 총 m비트 중 소수 f비트.  
-> 값의 범위(2’s complement >> f):  \[
--\frac{2^{m-1}}{2^f} \le X \le \frac{2^{m-1}-1}{2^f}
-\]
+<img src="IMG/image copy 2.png">
 
 ---
 
-### 1) 곱셈 비트폭
-- 기본:  
-  \[
-  (m_1,f_1)\times(m_2,f_2)\Rightarrow \boxed{(m_1+m_2,\ f_1+f_2)}
-  \]
-- **대칭 포화 가정**(입력의 최솟값 −2^{m−1} 배제) 시:  
-  \[
-  \boxed{(m_1+m_2-1,\ f_1+f_2)}
-  \]
-- 왜 1비트 절약?  
-  최악 케이스 \((−2^{m-1})\times(−2^{m-1})\)를 미리 금지 → 최대곱이 한 단계 내려감.
-
-**예)** (8,4)×(8,5) → (15,9) 〈대칭 포화〉
+<img src="IMG/image copy.png">
 
 ---
 
-### 2) 누산(덧셈) 비트폭
-- 같은 스케일 항 **N개** 합:  
-  \[
-  \boxed{(m_\text{mul}+\lceil\log_2 N\rceil,\ f_\text{mul})}
-  \]
-  (여기서 \(m_\text{mul}, f_\text{mul}\)은 “곱 한 항”의 m,f)
-
-- 더 타이트하게 잡기(선택):  
-  \[
-  \lceil\log_2 N\rceil \;\Longrightarrow\; \lceil\log_2 \sum |h_i|\rceil
-  \]
-  (계수 \(\sum|h_i|\)가 1.5 등으로 작으면 여유 비트를 줄여도 됨)
-
-**예)** (8,4)×(8,5) ⇒ (15,9), 탭 21개 ⇒ (15+5, 9) = **(20,9)**
+<img src="IMG/image.png">
 
 ---
 
@@ -78,4 +48,6 @@ else if(out < -32767) out = -32767;
 - **C 구현**: [filter_fixed.c](test/filter_fixed.c)
 - **Verilog 구현**: 
   - [filter.v](test/filter.v)
-  - [tb_filter.sv](test/tb_filter.sv)
+  - [top_filter.sv](test/top_filter.sv)
+
+<img src="IMG/spectrum_out2.png" width=600 height=400>

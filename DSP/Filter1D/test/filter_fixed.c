@@ -24,10 +24,10 @@ int filter(int in) {
 
 int main(void) {
   FILE *inf, *outf, *fixed_inf, *fixed_outf;
-  inf = fopen("input.txt", "r");
-  outf = fopen("output.txt", "w");
-  fixed_inf = fopen("fixed_input_c.txt", "w");
-  fixed_outf = fopen("fixed_output_c.txt", "w");
+  inf = fopen("i_int.txt", "r");
+  outf = fopen("o_float.txt", "w");
+  fixed_inf = fopen("i_fixed.txt", "w");
+  fixed_outf = fopen("o_fixed.txt", "w");
 
   float in_f;
   while(fscanf(inf, "%f", &in_f) > 0)  // floating input

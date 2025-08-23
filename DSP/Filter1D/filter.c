@@ -27,8 +27,8 @@ float filter(float in)
 }
 
 int main(){
-  FILE* inf = fopen("input.txt", "r");
-  FILE* outf = fopen("output.txt", "w");
+  FILE* inf = fopen("i_float.txt", "r");
+  FILE* outf = fopen("o_float.txt", "w");
   float in;
   while(fscanf(inf, "%f" ,&in) > 0) // 주소 전달
   {

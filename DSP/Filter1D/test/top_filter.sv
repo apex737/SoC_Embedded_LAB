@@ -17,8 +17,8 @@ module top_filter;
 
     initial begin
         // 입력 파일 열기(읽기), 출력 파일 열기(쓰기)
-        fd_in  = $fopen("fixed_input_c.txt", "r");
-        fd_out = $fopen("output_v.txt", "w");
+        fd_in  = $fopen("i_fixed.txt", "r");
+        fd_out = $fopen("o_fixed_v.txt", "w");
 
         // 리셋 시퀀스
         x_in = 0;
