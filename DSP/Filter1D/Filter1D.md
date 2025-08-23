@@ -6,58 +6,31 @@
   - LPF: 노이즈 제거(blur)
   - HPF: 엣지 검출(변화 강조)
 
-### 1. 구현
+### 1D-Filter 구현
 
 - 길이 L인 커널 h[k] (L-tap Kernel; 시스템의 Impulse Response)
 - 현재 입력과 이전 N-1 개의 입력을 저장하는 배열 x[n-k]
-- Σ h(k)\*x(n-k); [k = 0 ~ N-1] : MAC 연산
+- Σ h(k)*x(n-k); [k = 0 ~ N-1] : MAC 연산
+- [1D-Filter.c](./filter.c)
 
-```c
 
-#include <stdio.h>
-float filter(float in)
-/*
-  1. 길이 L인 배열에 시간 차 입력을 받는다
-  2. 컨볼루션 연산을 수행한다
-  3. 결과를 txt 파일에 출력한다
-*/
-{
-  static float x[21];
-  float h[21] = {
-    -0.000306021779757585, 0.00189666282674638, 0.00257299891941012, -0.0090277441097318,
-    -0.0075198095107301, 0.0291019349476909, 0.0145629522024416, -0.0807110457423653,
-    -0.0210214194708373, 0.308909103630076,  0.523660422383779, 0.308909103630076,
-    -0.0210214194708373, -0.0807110457423653,  0.0145629522024416, 0.0291019349476909,
-    -0.0075198095107301, -0.0090277441097318,  0.00257299891941012, 0.00189666282674638,
-    -0.000306021779757585
-  };
+### 검증 (Octave)
+- output.txt 파일을 gnu-octave를 사용하여 검증
+- [spectrum.m](./spectrum.m)
 
-  for(int i = 20; i > 0; i--)
-    x[i] = x[i-1]; // RShift
-  x[0] = in;
+<img src="spectrum_out.png" width=500 height=400>
 
-  float out = 0;
-  for(int i = 0; i < 21; i++)
-    out += x[i]*h[i];
-  return out;
-}
+### Fixed-Point로 구현
 
-int main(){
-  FILE* inf = fopen("input.txt", "r");
-  FILE* outf = fopen("output.txt", "w");
-  float in;
-  while(fscanf(inf, "%f" ,&in) > 0) // 주소 전달
-  {
-    float out = filter(in);
-    fprintf(outf, "%.6f\n", out); // 값 전달
-  }
-  fclose(inf);
-  fclose(outf);
+<img src="fixed.jpg" width=600 height=500>
 
-}
-```
+##### Fixed-Point MAC의 범위
+- **곱셈**: (m1, f1) * (m2, f2) 
+  - 대칭 포화를 가정해서 경계값 입력을 배제
+  - **결론: (m1+m2-1, f1+f2)**
+- **덧셈**: pd_1(m1, f1) + pd_2(m2, f2) + ... pd_N-1(..)
+  - 샘플 개수가 N개이면 최대 N배까지 커질 수 있으므로, clog2(N)만큼 비트 추가
+  - **결론: (m1+m2-1+clog2(N), f1+f2)**
+  
+1. 
 
-### 2. 검증 (Linux 환경)
-
-- 시뮬레이션/파형: iverilog/verilator/pyverilator + gtkwave
-- 플롯: Numpy, matplotlib, OpenCV, pandas
