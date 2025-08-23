@@ -14,29 +14,23 @@ initial begin
 	$readmemh("../c/img_in.dat", img_data);
 	i_strb = 1'b0;
 	i_data = 'bx;
-	#3;
-	n_reset = 1'b0;
-	#20;
-	n_reset = 1'b1;
-	@(posedge clk);
-	@(posedge clk);
-	@(posedge clk);
+	#3; n_reset = 1'b0;
+	#20; n_reset = 1'b1;	
+	@(posedge clk); @(posedge clk); @(posedge clk);	
 	repeat(3) begin
-	for(idx=0;idx<65536;idx=idx+1) begin
-		i_strb = 1'b1;
-		i_data = img_data[idx];
-		@(posedge clk);
-		repeat(16) begin
-			i_strb = 1'b0;
-			i_data = 'bx;
+		for(idx=0;idx<65536;idx=idx+1) begin
+			i_strb = 1'b1;
+			i_data = img_data[idx];
 			@(posedge clk);
+			repeat(16) begin
+				i_strb = 1'b0;
+				i_data = 'bx;
+				@(posedge clk);
+			end
 		end
 	end
-end
-@(posedge clk);
-@(posedge clk);
-@(posedge clk);
-$finish;
+	@(posedge clk); @(posedge clk); @(posedge clk);	
+	$finish;
 end
 
 wire o_strb;
