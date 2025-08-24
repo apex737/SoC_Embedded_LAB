@@ -1,8 +1,8 @@
 module mem_single 
 #(
-   WD = 128, 
-   DEPTH = 64, 
-   WA = $clog2(DEPTH)
+   parameter WD = 8, 
+   parameter DEPTH = 256*256*2, 
+   parameter WA = $clog2(DEPTH)
 )(
   input clk, 
   input cs, 

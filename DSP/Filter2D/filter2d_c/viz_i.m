@@ -8,8 +8,8 @@ fclose(fid);
 img_in = reshape(V(1:256*256), 256, 256);  % 256x256으로 재구성 (row-major)
 img_in = uint8(img_in);                    % 0~255 정수로 캐스팅
 
-imshow(img_in);  % 행렬의 값을 색깔로 표시. 값이 클수록 밝게, 작을수록 어둡게
-colormap gray;    % 흑백 이미지
+imshow(img_in);  % 행렬의 값을 색깔로 표시; 값이 클수록 밝게
+colormap gray;   % 흑백 이미지
 axis image off;
 title('img\_in (original)');
 print('-dpng', 'img_i.png', '-r300');  % 파일 저장

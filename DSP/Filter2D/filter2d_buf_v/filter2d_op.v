@@ -117,13 +117,10 @@ wire [12:0] pd_rnd= pd_rnd_1[19:7];
 wire [7:0] pd_out = (pd_rnd< 0) ? 0 : (pd_rnd> WIDTH - 1) ? WIDTH - 1 : pd_rnd[7:0];
 
 always@(posedge clk or negedge n_reset) begin
-	if(~n_reset) begin
-		o_strb <= 1'b0;
-		o_data <= 'b0;
-	end else begin
+	if(~n_reset) begin o_strb <= 0; o_data <= 0; end 
+	else begin
 		o_strb <= (cnt == 11);
-		if(cnt == 11)
-			o_data <= pd_out;
+		if(cnt == 11) o_data <= pd_out;			
 	end
 end
 endmodule
