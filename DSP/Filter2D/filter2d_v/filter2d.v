@@ -13,8 +13,8 @@ module filter2d #(parameter WIDTH = 256)
 	output cs,
 	output we,
 	output [16:0] addr, // clog2(256*256*2) = 17
-	output [7:0] din,
-	input [7:0] dout,
+	output [7:0] din,	// SRAM input
+	input [7:0] dout,	// SRAM output
 	// Kernel I/F
 	input h_write,
 	input [3:0] h_idx,
@@ -25,15 +25,15 @@ module filter2d #(parameter WIDTH = 256)
 reg signed [7:0] h[0:8];
 always@(posedge clk or negedge reset_n) begin
 	if(~reset_n) begin
-		h[0] <= 8'h08;
-		h[1] <= 8'h10;
-		h[2] <= 8'h08;
-		h[3] <= 8'h10;
-		h[4] <= 8'h20;
-		h[5] <= 8'h10;
-		h[6] <= 8'h08;
-		h[7] <= 8'h10;
-		h[8] <= 8'h08;
+		h[0] <= -8'h01;
+		h[1] <= -8'h01;
+		h[2] <= -8'h01;
+		h[3] <= -8'h01;
+		h[4] <= 8'h10;
+		h[5] <= -8'h01;
+		h[6] <= -8'h01;
+		h[7] <= -8'h01;
+		h[8] <= -8'h01;
 	end 
 	else if(h_write) h[h_idx] <= h_data;	
 end

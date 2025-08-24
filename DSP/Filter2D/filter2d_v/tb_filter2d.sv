@@ -13,7 +13,7 @@ always #5 clk = ~clk;
 
 initial begin
     reset_n = 1'b1;
-    $readmemh("img_in.dat", i_buf.data); // 1번째 Memory에 매핑
+    $readmemh("../filter2d_c/img_in.dat", i_buf.data, 0, 256*256-1); // 1번째 Memory에 매핑
     #3; reset_n = 1'b0;
     #20; reset_n = 1'b1;
     @(posedge clk); @(posedge clk); @(posedge clk);
