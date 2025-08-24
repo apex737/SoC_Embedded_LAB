@@ -27,3 +27,7 @@
   - **Strobe**
     - **full(~s_ready):** (wptr_round != rptr_round) && (wptr == rptr);
     - **empty(~m_valid):** (wptr_round == rptr_round) && (wptr == rptr);
+
+- **구현:** 
+  - [sync_fifo_skid.v](./sync_fifo_skid.v)
+  - [tb_sync_fifo.v](./tb_sync_fifo.v) 

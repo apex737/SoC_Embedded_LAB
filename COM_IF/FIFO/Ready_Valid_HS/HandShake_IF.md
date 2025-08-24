@@ -15,7 +15,7 @@
   - **m_ready가 1**이면 파이프에서 값이 빠져나가기 때문에 새로운 값을 넣을 수 있음
 - **i_hs = s_ready & s_vaild**
   - **Stimulus**는 **i_hs**에서 **Write**
-- **m_hs = m_ready & m_valid**
+- **o_hs = m_ready & m_valid**
   - **Checker**는 **o_hs**에서 **Read**
 
 ## 2. Skid Buffer

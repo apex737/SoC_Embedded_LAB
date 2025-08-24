@@ -22,15 +22,15 @@
 
 # Fixed-Point로 구현
 
-<img src="IMG/image copy 2.png">
+<img src="IMG/image copy 2.png" width=600 height=400>
 
 ---
 
-<img src="IMG/image copy.png">
+<img src="IMG/image copy.png" width=600 height=400>
 
 ---
 
-<img src="IMG/image.png">
+<img src="IMG/image.png" width=600 height=400>
 
 ---
 
