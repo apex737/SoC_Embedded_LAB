@@ -25,15 +25,15 @@ module filter2d #(parameter WIDTH = 256)
 reg signed [7:0] h[0:8];
 always@(posedge clk or negedge reset_n) begin
 	if(~reset_n) begin
-		h[0] <= -8'h01;
-		h[1] <= -8'h01;
-		h[2] <= -8'h01;
-		h[3] <= -8'h01;
-		h[4] <= 8'h10;
-		h[5] <= -8'h01;
-		h[6] <= -8'h01;
-		h[7] <= -8'h01;
-		h[8] <= -8'h01;
+		h[0] <= 8'h08;
+		h[1] <= 8'h10;
+		h[2] <= 8'h08;
+		h[3] <= 8'h10;
+		h[4] <= 8'h20;
+		h[5] <= 8'h10;
+		h[6] <= 8'h08;
+		h[7] <= 8'h10;
+		h[8] <= 8'h08;
 	end 
 	else if(h_write) h[h_idx] <= h_data;	
 end
@@ -123,9 +123,9 @@ always@(posedge clk or negedge reset_n) begin
 end
 
 // rounding & clamping
-wire [19:0] pd_rnd_1 = acc + (1<<6);
+wire signed [19:0] pd_rnd_1 = acc + (1<<6);
 // Fixed-Point (20,7)에서 정수부 추출 
-wire [12:0] pd_rnd = pd_rnd_1[19:7]; 
+wire signed [12:0] pd_rnd = pd_rnd_1[19:7]; 
 // 정수부의 하위 8bit 추출 
 wire [7:0] pd_out = (pd_rnd < 0) ? 0 : (pd_rnd > WIDTH - 1) ? WIDTH - 1 : pd_rnd[7:0];
 wire mem_rd = (cnt >= 0) && (cnt <= 8) && (on_proc == 1'b1);

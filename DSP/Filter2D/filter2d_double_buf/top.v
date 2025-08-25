@@ -1,6 +1,6 @@
-module filter2d (
+module top (
 	input clk,
-	input n_reset,
+	input reset_n,
 	input i_strb,
 	input [7:0] i_data,
 	output o_strb,
@@ -11,9 +11,9 @@ wire mem_rd;
 wire [15:0] rd_addr;
 wire [7:0] rd_data;
 
-filter2d_buf i_buf (
+buf_ctrl i_buf (
 	.clk(clk),
-	.n_reset(n_reset),
+	.reset_n(reset_n),
 	.i_strb(i_strb),
 	.i_data(i_data),
 	.start(start),
@@ -24,7 +24,7 @@ filter2d_buf i_buf (
 
 filter2d_op i_op(
 	.clk(clk),
-	.n_reset(n_reset),
+	.reset_n(reset_n),
 	.start(start),
 	.mem_rd(mem_rd),
 	.rd_addr(rd_addr),
@@ -34,3 +34,4 @@ filter2d_op i_op(
 );
 
 endmodule
+

@@ -11,7 +11,7 @@ integer idx, cnt;
 initial begin
 	cnt = 0;
 	n_reset = 1'b1;
-	$readmemh("../c/img_in.dat", img_data);
+	$readmemh("../filter2d_c/img_in.dat", img_data);
 	i_strb = 1'b0;
 	i_data = 'bx;
 	#3; n_reset = 1'b0;
