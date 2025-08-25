@@ -30,9 +30,29 @@ always@(posedge clk or negedge reset_n) begin
 	else if(h_write) h[h_idx] <= h_data;
 end
 
-reg valid; // 3×3 윈도가 채워졌음을 의미
+reg valid; 
+/*  cnt (FSM)
+    0: (1) 3×3 입력 버퍼를 왼쪽으로 시프트
+       (2) 최신 입력을 버퍼의 (2,2)에 갱신
+       (3) 메모리 읽기 #1 주소 설정 (rptr0 = wptr)
+
+    1: (1) 메모리 읽기 #1 결과를 (0,2)에 갱신
+       (2) 메모리 읽기 #2 주소 설정 (rptr1 = wptr ± 256)
+
+    2: (1) 메모리 읽기 #2 결과를 (1,2)에 갱신
+       (2) 현재 픽셀을 메모리에 기록 → mem_wr & wr_addr++ 
+    
+    3: mul
+    4: sum
+    5: rounding & clamping 
+    6: o_data 출력
+*/
 reg [3:0] cnt;
-reg [7:0] cnt_x, cnt_y;
+reg [7:0] cnt_x, cnt_y; /*  지금 생성할 출력 픽셀의 중심 좌표(e)
+                            주소 포인터가 아닌, 경계 마스킹 용도로만 사용함
+                            Ex. (cnt_x, cnt_y) = (0, 0)
+                            (1,1), (1,2), (2,1), (2,2)의 부분곱만 합산
+                        */
 reg [7:0] i_data_d;
 
 always@(posedge clk or negedge reset_n) begin
@@ -42,20 +62,23 @@ always@(posedge clk or negedge reset_n) begin
 		(cnt_x, cnt_y)의 IDLE 값은 (254,254) */
 	if(~reset_n) begin
 		valid <=  0; 
-		cnt <= 7; // IDLE 7 (cnt 0-6까지 값이 전부 FSM의 유의미한 State)
+		cnt <= 7; // IDLE 7 
 		cnt_x <= 254; 
 		cnt_y <= 254;
 		i_data_d <= 0;
 	end	else begin
-		// cnt setting
 		if(i_strb) begin
 			cnt_x <= (cnt_x == WIDTH - 1) ? 0 : cnt_x+1;
 			if(cnt_x == WIDTH - 1) begin
 				cnt_y <= (cnt_y == WIDTH - 1) ? 0 : cnt_y+1;
-				if(cnt_y == WIDTH - 1) valid <= 1; // 첫 프레임 다 돌면 유효
+				if(cnt_y == WIDTH - 1) valid <= 1; 
+				/*  Coarse gating(garbage)
+                    충분히 안전한 시점까지 o_strb를 막음. 
+					경계조건문 처리가 생략되어 구현/검증이 쉽고 프레임 간 오염도 원천 차단. 
+					단점은 초반 한 프레임을 버린다는 비용.         
+                */ 
 			end
 		end
-		// cnt7(IDLE) -> cnt0
 		if(i_strb) begin 
 			cnt <= 0;
 			i_data_d <= i_data;
@@ -64,7 +87,6 @@ always@(posedge clk or negedge reset_n) begin
 	end
 end
 
-// Data Reuse Buffer (cnt: 0~2)
 reg [7:0] ibuf[2:0][2:0]; 	// 3x3 픽셀 윈도
 wire [7:0] dout;		   	// 라인버퍼(SRAM) 읽은 값
 always@(posedge clk or negedge reset_n) begin
@@ -109,6 +131,7 @@ wire we = mem_wr;
 wire [8:0] addr = (mem_wr) ? wptr : rptr;
 wire [7:0] din = i_data_d;
 
+// Line Buffer: 과거 입력 2W개를 저장하는 순환 버퍼
 mem_single #(
 	.WD(8),
 	.DEPTH(2*WIDTH)

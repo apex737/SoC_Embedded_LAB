@@ -47,5 +47,8 @@
   - [tb](filter2d_double_buf/tb.v)
 
 ## 3. Line Buffer
-> AREA COST를 최소화 하도록, 값을 읽는 중에도 처리하자
+> AREA COST를 최소화 하도록, 값을 읽는 중에도 처리하자 (Circular Buffer)
+> 이미 읽은 데이터는 재사용하자 
+
+
 
