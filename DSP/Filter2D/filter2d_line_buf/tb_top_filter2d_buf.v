@@ -1,5 +1,5 @@
 module top_filter_2d;
-reg clk, n_reset;
+reg clk, reset_n;
 reg start;
 initial clk = 1'b0;
 always #5 clk = ~clk;
@@ -10,12 +10,12 @@ integer idx, cnt;
 
 initial begin
 	cnt = 0;
-	n_reset = 1'b1;
+	reset_n = 1'b1;
 	$readmemh("../filter2d_c/img_in.dat", img_data);
 	i_strb = 1'b0;
 	i_data = 'bx;
-	#3; n_reset = 1'b0;
-	#20; n_reset = 1'b1;	
+	#3; reset_n = 1'b0;
+	#20; reset_n = 1'b1;	
 	@(posedge clk); @(posedge clk); @(posedge clk);	
 	repeat(3) begin
 		for(idx=0;idx<65536;idx=idx+1) begin
@@ -38,7 +38,7 @@ wire [7:0] o_data;
 
 filter2d i_filter (
 	.clk(clk),
-	.n_reset(n_reset),
+	.reset_n(reset_n),
 	.i_strb(i_strb),
 	.i_data(i_data),
 	.o_strb(o_strb),
